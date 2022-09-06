@@ -47,7 +47,6 @@ const Register = (props) => {
                 setError("Username or email already used");
             })
         }
-        console.log("lmao");
         setLoading(false);
     }
 
