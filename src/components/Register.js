@@ -9,8 +9,10 @@ const Register = (props) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
+    const [loading ,setLoading] = useState(false);
 
     const signUp = (email, pw, username) => {
+        setLoading(true);
         if(password !== confirmPassword) {
             setError('Passwords not equal');
         } else if(!email || !pw || !username) {
@@ -26,10 +28,10 @@ const Register = (props) => {
             urlencoded.append("username", username);
 
             var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: urlencoded,
-            redirect: 'follow'
+                method: 'POST',
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: 'follow'
             };
 
             fetch(`${process.env.REACT_APP_SERVER_LINK}/api/users`, requestOptions)
@@ -45,11 +47,12 @@ const Register = (props) => {
                 setError("Username or email already used");
             })
         }
+        setLoading(false);
     }
 
     return (
         <div className="backdrop_container">
-            <div className="textbox_container">
+            {!loading && <div className="textbox_container">
                 <div>
                     <h1>GameGate Sign Up</h1>
                     <p>After registering, check your email for a verification link</p>
@@ -64,7 +67,8 @@ const Register = (props) => {
                 <div>
                     <p id='register_msg'>Already have an account? Log in <a href="/login">here</a></p>
                 </div>
-            </div>
+            </div>}
+            {loading && <div>Processing...</div>}
         </div>
     );
 }
